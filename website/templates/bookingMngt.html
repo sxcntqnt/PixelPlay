@@ -1,0 +1,89 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Bookings</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ base_url() }}/dashboard">Dashboard</a></li>
+          <li class="breadcrumb-item active">Bookings</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table id="triptbl" class="table card-table table-vcenter text-nowrap">
+            <thead>
+              <tr>
+                <th class="w-1">S.No</th>
+                <th>Customer</th>
+                <th>Vehicle</th>
+                <th>Type</th>
+                <th>Driver</th>
+                <th>Trip Status</th>
+                {% if userpermission('lr_trips_list_edit') %}
+                  <th>Action</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody>
+              {% if triplist %}
+                {% set count = 1 %}
+                {% for triplists in triplist %}
+                  <tr>
+                    <td>{{ count }}</td>
+                    <td>{{ triplists['t_customer_details'].c_name|capitalize }}</td>
+                    <td>{{ triplists['t_vechicle_details'].v_name|output }}</td>
+                    <td>{{ triplists['t_type']|capitalize }}</td>
+                    <td>
+                      {% if triplists['t_driver_details'].d_name is defined %}
+                        {{ triplists['t_driver_details'].d_name }}
+                      {% else %}
+                        <span class="badge badge-danger">Yet to Assign</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% set status = '' %}
+                      {% if triplists['t_trip_status'] == 'ongoing' %}
+                        {% set status = '<span class="badge badge-info">Ongoing</span>' %}
+                      {% elif triplists['t_trip_status'] == 'completed' %}
+                        {% set status = '<span class="badge badge-success">Completed</span>' %}
+                      {% elif triplists['t_trip_status'] == 'yettostart' %}
+                        {% set status = '<span class="badge badge-warning">Yet to start</span>' %}
+                      {% elif triplists['t_trip_status'] == 'cancelled' %}
+                        {% set status = '<span class="badge badge-danger">Cancelled</span>' %}
+                      {% elif triplists['t_trip_status'] == 'yettoconfirm' %}
+                        {% set status = '<span class="badge badge-danger">Yet to Confirm</span>' %}
+                      {% endif %}
+                      {{ status }}
+                    </td>
+                    {% if userpermission('lr_trips_list_edit') %}
+                      <td>
+                        <a class="icon" href="{{ base_url() }}trips/edittrip/{{ triplists['t_id'] }}">
+                          <i class="fa fa-edit"></i>
+                        </a> |
+                        <a class="icon" href="{{ base_url() }}trips/details/{{ triplists['t_id'] }}">
+                          <i class="fa fa-eye"></i>
+                        </a>
+                      </td>
+                    {% endif %}
+                  </tr>
+                  {% set count = count + 1 %}
+                {% endfor %}
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+</section>
+<!-- /.content -->

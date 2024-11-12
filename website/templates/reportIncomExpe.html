@@ -1,0 +1,210 @@
+<div class="content-header">
+   <div class="container-fluid">
+      <div class="row mb-2">
+         <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Income and Expenses Report</h1>
+         </div>
+         <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+               <li class="breadcrumb-item"><a href="{{ base_url() }}reports">Report</a></li>
+               <li class="breadcrumb-item active">Income and Expenses Report</li>
+            </ol>
+         </div>
+      </div>
+   </div>
+</div>
+
+<section class="content">
+   <div class="container-fluid">
+      <form method="post" id="incomeexpense_report" class="card basicvalidation" action="{{ base_url() }}reports/incomeexpense">
+         <div class="card-body">
+            <div class="row">
+               <div class="col-md-3">
+                  <div class="form-group row">
+                     <label for="incomeexpense_from" class="col-sm-5 col-form-label">Report From</label>
+                     <div class="col-sm-6 form-group">
+                        <input type="text" required="true" class="form-control form-control-sm datepicker" value="{{ $_POST['incomeexpense_from'] ?? '' }}" id="incomeexpense_from" name="incomeexpense_from" placeholder="Date From">
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-3">
+                  <div class="form-group row">
+                     <label for="incomeexpense_to" class="col-sm-5 col-form-label">Report To</label>
+                     <div class="col-sm-6 form-group">
+                        <input type="text" required="true" class="form-control form-control-sm datepicker" value="{{ $_POST['incomeexpense_to'] ?? '' }}" id="incomeexpense_to" name="incomeexpense_to" placeholder="Date To">
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="form-group row">
+                     <label for="booking_to" class="col-sm-3 col-form-label">Vehicle</label>
+                     <div class="col-sm-8 form-group">
+                        <select required="true" id="incomeexpense_vechicle" class="form-control selectized" name="incomeexpense_vechicle">
+                           <option value="all">All Vehicle</option>
+                           {% for vehicle in vehiclelist %}
+                           <option {{ $_POST['booking_vechicle'] == vehicle['v_id'] ? 'selected' : '' }} value="{{ vehicle['v_id'] }}">{{ vehicle['v_name'] }} - {{ vehicle['v_registration_no'] }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <input type="hidden" id="incomeexpensereport" name="incomeexpensereport" value="1">
+               <div class="col-md-2">
+                  <button type="submit" class="btn btn-block btn-outline-info btn-sm">Generate Report</button>
+               </div>
+            </div>
+         </div>
+      </form>
+	<div class="card">
+   <div class="card-body p-0">
+      {% if incomexpense is not empty %}
+      {% set income = expense = 0 %}
+      {% for item in incomexpense %}
+      {% if item['ie_type'] == 'income' %}
+      {% set income = income + item['ie_amount'] %}
+      {% endif %}
+      {% if item['ie_type'] == 'expense' %}
+      {% set expense = expense + item['ie_amount'] %}
+      {% endif %}
+      {% endfor %}
+      {% set total = income - expense %}
+      <div class="row">
+         <div class="col-12 col-sm-6 col-md-2">
+         </div>
+         <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+               <span class="info-box-icon bg-success elevation-1"><i class="fa fa-thumbs-up"></i></span>
+               <div class="info-box-content">
+                  <span class="info-box-text">Total Income</span>
+                  <span class="info-box-number">{{ income }}</span>
+               </div>
+            </div>
+         </div>
+         <div class="clearfix hidden-md-up"></div>
+         <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+               <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-thumbs-down"></i></span>
+               <div class="info-box-content">
+                  <span class="info-box-text">Total Expense</span>
+                  <span class="info-box-number">{{ expense }}</span>
+               </div>
+            </div>
+         </div>
+         <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+               <span class="info-box-icon bg-info elevation-1"><i class="fa fa-calculator"></i></span>
+               <div class="info-box-content">
+                  <span class="info-box-text">{{ total >= 0 ? 'Profit' : 'Loss' }}</span>
+                  <span class="info-box-number">{{ total }}</span>
+               </div>
+            </div>
+         </div>
+      </div>
+      <table class="datatableexport table card-table">
+         <thead>
+            <tr>
+               <th class="w-1">S.No</th>
+               <th>Vehicle</th>
+               <th>Date</th>
+               <th>Description</th>
+               <th>Amount</th>
+               <th>Type</th>
+            </tr>
+         </thead>
+         <tbody>
+            {% for incomexpenses in incomexpense %}
+            <tr>
+               <td>{{ loop.index }}</td>
+               <td>{{ incomexpenses['vech_name'].v_name ~ '_' ~ incomexpenses['vech_name'].v_registration_no }}</td>
+               <td>{{ incomexpenses['ie_date'] }}</td>
+               <td>{{ incomexpenses['ie_description'] }}</td>
+               <td>{{ incomexpenses['ie_amount'] }}</td>
+               <td>
+                  <span class="badge {{ incomexpenses['ie_type'] == 'income' ? 'badge-success' : 'badge-danger' }}">
+                     {{ incomexpenses['ie_type'] == 'income' ? 'Income' : 'Expense' }}
+                  </span>
+               </td>
+            </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      {% endif %}
+   </div>
+</div>
+<div class="card">
+   <div class="card-body p-0">
+      {% if incomexpense is not empty %}
+      {% set income = expense = 0 %}
+      {% for item in incomexpense %}
+      {% if item['ie_type'] == 'income' %}
+      {% set income = income + item['ie_amount'] %}
+      {% endif %}
+      {% if item['ie_type'] == 'expense' %}
+      {% set expense = expense + item['ie_amount'] %}
+      {% endif %}
+      {% endfor %}
+      {% set total = income - expense %}
+      <div class="row">
+         <div class="col-12 col-sm-6 col-md-2">
+         </div>
+         <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+               <span class="info-box-icon bg-success elevation-1"><i class="fa fa-thumbs-up"></i></span>
+               <div class="info-box-content">
+                  <span class="info-box-text">Total Income</span>
+                  <span class="info-box-number">{{ income }}</span>
+               </div>
+            </div>
+         </div>
+         <div class="clearfix hidden-md-up"></div>
+         <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+               <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-thumbs-down"></i></span>
+               <div class="info-box-content">
+                  <span class="info-box-text">Total Expense</span>
+                  <span class="info-box-number">{{ expense }}</span>
+               </div>
+            </div>
+         </div>
+         <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+               <span class="info-box-icon bg-info elevation-1"><i class="fa fa-calculator"></i></span>
+               <div class="info-box-content">
+                  <span class="info-box-text">{{ total >= 0 ? 'Profit' : 'Loss' }}</span>
+                  <span class="info-box-number">{{ total }}</span>
+               </div>
+            </div>
+         </div>
+      </div>
+      <table class="datatableexport table card-table">
+         <thead>
+            <tr>
+               <th class="w-1">S.No</th>
+               <th>Vehicle</th>
+               <th>Date</th>
+               <th>Description</th>
+               <th>Amount</th>
+               <th>Type</th>
+            </tr>
+         </thead>
+         <tbody>
+            {% for incomexpenses in incomexpense %}
+            <tr>
+               <td>{{ loop.index }}</td>
+               <td>{{ incomexpenses['vech_name'].v_name ~ '_' ~ incomexpenses['vech_name'].v_registration_no }}</td>
+               <td>{{ incomexpenses['ie_date'] }}</td>
+               <td>{{ incomexpenses['ie_description'] }}</td>
+               <td>{{ incomexpenses['ie_amount'] }}</td>
+               <td>
+                  <span class="badge {{ incomexpenses['ie_type'] == 'income' ? 'badge-success' : 'badge-danger' }}">
+                     {{ incomexpenses['ie_type'] == 'income' ? 'Income' : 'Expense' }}
+                  </span>
+               </td>
+            </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      {% endif %}
+   </div>
+</div>
+

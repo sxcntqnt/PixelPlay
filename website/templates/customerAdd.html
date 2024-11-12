@@ -1,0 +1,69 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{{ 'Edit Customer' if customerdetails is defined else 'Add Customer' }}</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ base_url() }}/dashboard">Customer</a></li>
+          <li class="breadcrumb-item active">{{ 'Edit Customer' if customerdetails is defined else 'Add Customer' }}</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="content">
+  <div class="container-fluid">
+    <form method="post" id="customer_add" class="card" action="{{ base_url() }}/customer/{{ 'updatecustomer' if customerdetails is defined else 'insertcustomer' }}">
+      <div class="card-body">
+        <div class="row">
+          <input type="hidden" name="c_id" id="c_id" value="{{ customerdetails[0]['c_id'] if customerdetails is defined else '' }}" >
+
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Name<span class="form-required">*</span></label>
+              <input type="text" required="true" class="form-control" value="{{ customerdetails[0]['c_name'] if customerdetails is defined else '' }}" id="c_name" name="c_name" placeholder="Customer Name">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Mobile<span class="form-required">*</span></label>
+              <input type="text" required="true" class="form-control" value="{{ customerdetails[0]['c_mobile'] if customerdetails is defined else '' }}" id="c_mobile" name="c_mobile" placeholder="Customer Mobile">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="text" required="true" class="form-control" value="{{ customerdetails[0]['c_email'] if customerdetails is defined else '' }}" id="c_email" name="c_email" placeholder="Customer Email">
+            </div>
+          </div>
+          {% if customerdetails[0]['c_isactive'] is defined %}
+          <div class="col-sm-6 col-md-2">
+            <div class="form-group">
+              <label for="c_isactive" class="form-label">Customer Status</label>
+              <select id="c_isactive" name="c_isactive" class="form-control" required="">
+                <option value="">Select Driver Status</option>
+                <option {% if customerdetails[0]['c_isactive'] == 1 %}selected{% endif %} value="1">Active</option>
+                <option {% if customerdetails[0]['c_isactive'] == 0 %}selected{% endif %} value="0">Inactive</option>
+              </select>
+            </div>
+          </div>
+          {% endif %}
+
+          <div class="col-sm-6 col-md-6">
+            <div class="form-group">
+              <label class="form-label">Address<span class="form-required">*</span></label>
+              <textarea class="form-control" required="true" id="c_address" autocomplete="off" placeholder="Address" name="c_address">{{ customerdetails[0]['c_address'] if customerdetails is defined else '' }}</textarea>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" id="c_created_date" name="c_created_date" value="{{ date('Y-m-d h:i:s') }}">
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">{{ 'Update Customer' if customerdetails is defined else 'Add Customer' }}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

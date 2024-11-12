@@ -1,0 +1,63 @@
+{% macro activate_menu(controller) %}
+  {% set CI = get_instance() %}
+  {% set last = CI.uri.total_segments() %}
+  {% set seg = CI.uri.segment(last) %}
+  {% if seg.isdigit() %}
+    {% set seg = CI.uri.segment(last-1) %}
+  {% endif %}
+  {% if controller in [seg] %}
+    active
+  {% else %}
+     
+  {% endif %}
+{% endmacro %}
+
+{% if session.userdata.session_data is not defined %}
+  {% set url = base_url() ~ 'login' %}
+  {% header("location: " ~ url) %}
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <title>
+        {% set data = sitedata() %}
+        {% set total_segments = uri.total_segments() %} 
+        {{ uri.segment(1)|replace('_', ' ')|title }} | {{ data['s_companyname']|output }}
+      </title>
+      <!-- Font Awesome Icons -->
+      <link rel="stylesheet" href="{{ base_url() }}assets/plugins/fontawesome-free/css/all.min.css">
+      <link rel="stylesheet" href="{{ base_url() }}assets/dist/css/adminlte.css">
+      <link rel="stylesheet" href="{{ base_url() }}assets/plugins/daterangepicker/daterangepicker.css">
+      <link rel="stylesheet" href="{{ base_url() }}assets/plugins/datepicker/bootstrap-datepicker.min.css">
+      <!-- Google Font: Source Sans Pro -->
+      <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+      <script src="{{ base_url() }}assets/plugins/jquery/jquery.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="{{ base_url() }}assets/plugins/toast/toast.min.css" />
+      <script src="{{ base_url() }}assets/plugins/toast/toast.min.js"></script>
+   </head>
+   <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+      <div class="wrapper">
+      <!-- Navbar -->
+      <nav class="main-header navbar navbar-expand navbar-dark theme-navbar-primary">
+         <!-- Left navbar links -->
+         <ul class="navbar-nav">
+            <li class="nav-item">
+               <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+            </li>
+         </ul>
+         <input type="hidden" id="base" value="{{ base_url() }}">
+         <!-- Right navbar links -->
+         <ul class="navbar-nav ml-auto">
+            <!-- Messages Dropdown Menu -->
+            <!-- Notifications Dropdown Menu -->
+            <li class="nav-item">
+               <a class="nav-link"  href="{{ base_url() }}login/logout">
+               <i class="fas fa-sign-out-alt"></i></a>
+            </li>
+         </ul>
+      </nav>
+      <!-- /.navbar -->

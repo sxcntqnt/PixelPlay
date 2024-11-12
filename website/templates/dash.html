@@ -1,0 +1,340 @@
+{%extends "base.html"%}
+<div class="content-header">
+   <div class="container-fluid">
+      <div class="row mb-2">
+         <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Dashboard
+            </h1>
+         </div>
+         <!-- /.col -->
+         <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+               <li class="breadcrumb-item"><a href="{{ base_url() }}/dashboard">Home</a></li>
+               <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+         </div>
+         <!-- /.col -->
+      </div>
+      <!-- /.row -->
+   </div>
+   <!-- /.container-fluid -->
+</div>
+
+<section class="content">
+   <div class="container-fluid">
+      <div class="row">
+         <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+               <span class="info-box-icon theme-bg-default elevation-1"><i class="fas fa-truck text-white"></i></span>
+               <div class="info-box-content">
+                  <span class="info-box-text">Total Vehicle's</span>
+                  <span class="info-box-number">{{ dashboard['tot_vehicles'] if dashboard['tot_vehicles'] != '' else '0' }}</span>
+               </div>
+               <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+         </div>
+         <!-- /.col -->
+         <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+               <span class="info-box-icon bg-success elevation-1"><i class="fa fa-user-secret"></i></span>
+               <div class="info-box-content">
+                  <span class="info-box-text">Total Drivers</span>
+                  <span class="info-box-number">{{ dashboard['tot_drivers'] if dashboard['tot_drivers'] != '' else '0' }}</span>
+               </div>
+               <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+         </div>
+         <!-- /.col -->
+         <!-- fix for small devices only -->
+         <div class="clearfix hidden-md-up"></div>
+         <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+               <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-user text-white"></i></span>
+               <div class="info-box-content">
+                  <span class="info-box-text">Total Customer</span>
+                  <span class="info-box-number">{{ dashboard['tot_customers'] if dashboard['tot_customers'] != '' else '0' }}</span>
+               </div>
+               <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+         </div>
+         <!-- /.col -->
+         <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-id-card"></i></span>
+               <div class="info-box-content">
+                  <span class="info-box-text">Today Trips</span>
+                  <span class="info-box-number">{{ dashboard['tot_today_trips'] if dashboard['tot_today_trips'] != '' else '0' }}</span>
+               </div>
+               <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+         </div>
+         <!-- /.col -->
+      </div>
+      <!-- /.row -->
+      <div class="row">
+         <div class="row col-md-12">
+            {% if userpermission('lr_ie_list') %}
+            <div class="col-md-6">
+               <div class="card">
+                  <div class="card-header">
+                     <h2 class="card-title">Income and Expenses</h2>
+                  </div>
+                  <div class="card-header border-transparent">
+                     <div class="card-body">
+                        <div class="d-flex">
+                           <p class="d-flex flex-column">
+                           </p>
+                           <p class="ml-auto d-flex flex-column text-right">
+                              <span class="text-success">
+                              </span>
+                           </p>
+                        </div>
+                        <div class="position-relative mb-4">
+                           <div class="chartjs-size-monitor">
+                              <div class="chartjs-size-monitor-expand">
+                                 <div class=""></div>
+                              </div>
+                              <div class="chartjs-size-monitor-shrink">
+                                 <div class=""></div>
+                              </div>
+                           </div>
+                           <canvas id="ie-chart" height="200" width="487" class="chartjs-render-monitor" style="display: block; width: 487px; height: 200px;"></canvas>
+                        </div>
+                        <div class="d-flex flex-row justify-content-end">
+                           <span class="mr-2">
+                           <i class="fas fa-square text-success"></i> Income
+                           </span>
+                           <span>
+                           <i class="fas fa-square text-danger"></i> Expenses
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            {% endif %}
+         </div>
+      </div>
+   </div>
+{% if userpermission('lr_reminder_list') %}
+<div class="col-md-6">
+   <div class="card">
+      <div class="card-header ui-sortable-handle" style="cursor: move;">
+         <h3 class="card-title">
+            <i class="ion ion-clipboard mr-1"></i>
+            Reminder
+         </h3>
+         <div class="card-tools">
+         </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+         <ul class="todo-list ui-sortable" data-widget="todo-list">
+            {% if todayreminder %}
+            {% for reminder in todayreminder %}
+            <li id="{{ reminder['r_id'] }}">
+               <span class="text">
+                  {{ reminder['r_message'] ~ ' ' }}
+                  <div class="tools">
+                     <button type="button" data-id="{{ reminder['r_id'] }}" class="todayreminderread btn btn-block btn-outline-primary btn-xs">Mark as Read</button>
+                  </div>
+               </span>
+            </li>
+            {% endfor %}
+            {% else %}
+            No reminders
+            {% endif %}
+         </ul>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer clearfix">
+         <a href="{{ base_url() }}reminder/addreminder"><button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add Reminder</button></a>
+      </div>
+   </div>
+</div>
+{% endif %}
+
+{% if userpermission('lr_liveloc') %}
+<div class="col-sm-6 col-lg-6">
+   <div class="card">
+      <div class="card-header">
+         <h2 class="card-title">Vehicle Current Location</h2>
+      </div>
+      <table class="datatable table card-table table-vcenter">
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>Current Location</th>
+            </tr>
+         </thead>
+         <tbody>
+            {% if vechicle_currentlocation %}
+            {% for vech_details in vechicle_currentlocation %}
+            <tr>
+               <td>{{ vech_details['v_name']|output }}</td>
+               <td>
+                  <span class="badge badge-{{ 'success' if vech_details['current_location'] else 'warning' }}">
+                     {{ vech_details['current_location']|wordwrap(60, '<br />\n') if vech_details['current_location'] else 'Location Not Updated' }}
+                  </span>
+               </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+         </tbody>
+      </table>
+   </div>
+</div>
+{% endif %}
+
+{% if userpermission('lr_vech_list') %}
+<div class="col-sm-6 col-lg-6">
+   <div class="card">
+      <div class="card-header">
+         <h2 class="card-title">Vehicle Running Status</h2>
+      </div>
+      <table class="datatable table card-table">
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>Status</th>
+            </tr>
+         </thead>
+         <tbody>
+            {% if vechicle_status %}
+            {% for vechicle_status_arr in vechicle_status %}
+            <tr>
+               <td>{{ vechicle_status_arr['v_name']|output }}</td>
+               <td>
+                  <span class="badge badge-{{ 'success' if vechicle_status_arr['t_trip_status'] == 'Completed' else 'danger' }}">
+                     {{ 'Idle' if vechicle_status_arr['t_trip_status'] == 'Completed' else 'In Trip' }}
+                  </span>
+               </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+         </tbody>
+      </table>
+   </div>
+</div>
+{% endif %}
+
+{% if userpermission('lr_geofence_list') %}
+<div class="col-md-6">
+   <div class="col-sm-12 col-lg-12">
+      <div class="card">
+         <div class="card-header">
+            <h2 class="card-title">Vehicle Geofence Status</h2>
+         </div>
+         <table class="datatable table card-table table-vcenter">
+            <thead>
+               <tr>
+                  <th>Vehicle</th>
+                  <th>Event</th>
+                  <th>Time</th>
+               </tr>
+            </thead>
+<tbody>
+   {% if geofenceevents %}
+   {% for geofence in geofenceevents %}
+   <tr>
+      <td>{{ geofence['v_name']|output }}</td>
+      <td>
+         {% if geofence['ge_event'] == 'inside' %}
+         Moving {{ geofence['ge_event']|output }} {{ geofence['geo_name'] }}
+         {% else %}
+         Exiting {{ geofence['ge_event']|output }} {{ geofence['geo_name'] }}
+         {% endif %}
+      </td>
+      <td>{{ geofence['ge_timestamp']|output }}</td>
+   </tr>
+   {% endfor %}
+   {% endif %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+{% endif %}
+</div>
+<!-- /.card -->
+<!-- /.col -->
+<!-- /.col -->
+</div>
+<!-- /.row -->
+</div><!--/. container-fluid -->
+</section>
+<!-- /.content -->
+</div>
+<script>
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    };
+    var mode = 'index';
+    var intersect = true;
+    var $visitorsChart = $('#ie-chart');
+    var visitorsChart = new Chart($visitorsChart, {
+        data: {
+            labels: {{ iechart_labels | tojson }},
+            datasets: [
+                {
+                    type: 'line',
+                    data: {{ iechart_income | tojson }},
+                    backgroundColor: 'transparent',
+                    borderColor: '#28a745',
+                    pointBorderColor: '#28a745',
+                    pointBackgroundColor: '#28a745',
+                    fill: false
+                },
+                {
+                    type: 'line',
+                    data: {{ iechart_expense | tojson }},
+                    backgroundColor: 'transparent',
+                    borderColor: '#dc3545',
+                    pointBorderColor: '#dc3545',
+                    pointBackgroundColor: '#dc3545',
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                mode: mode,
+                intersect: intersect
+            },
+            hover: {
+                mode: mode,
+                intersect: intersect
+            },
+            legend: {
+                display: false
+            },
+            scales: {
+                yAxes: [{
+                    gridLines: {
+                        display: true,
+                        lineWidth: '4px',
+                        color: 'rgba(0, 0, 0, .2)',
+                        zeroLineColor: 'transparent'
+                    },
+                    ticks: $.extend({
+                        beginAtZero: true,
+                        suggestedMax: 200
+                    }, ticksStyle)
+                }],
+                xAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: ticksStyle
+                }]
+            }
+        }
+    });
+</script>

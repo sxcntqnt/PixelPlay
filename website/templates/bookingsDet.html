@@ -1,0 +1,129 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Booking Details</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ base_url() }}/dashboard">Dashboard</a></li>
+          <li class="breadcrumb-item active">Booking Details</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      {% set totalpaidamt = 0 %}
+      {% if paymentdetails|length >= 1 %}
+        {% for payment in paymentdetails %}
+          {% set totalpaidamt = totalpaidamt + payment['tp_amount'] %}
+        {% endfor %}
+      {% endif %}
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+            <div class="row">
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Total Amount</span>
+                    <span class="info-box-number text-center text-muted mb-0">{{ tripdetails['t_trip_amount'] }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Paid Amount</span>
+                    <span class="info-box-number text-center text-muted mb-0">{{ totalpaidamt }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">{{ tripdetails['t_trip_amount'] > totalpaidamt ? 'Pending' : 'Excess' }}</span>
+                    <span class="info-box-number text-center text-muted mb-0">{{ tripdetails['t_trip_amount'] - totalpaidamt | regex_replace('[^\\d\\.]+','') }} <span></span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <h4>Overview:</h4>
+                <div class="post">
+                  <div class="row">
+                    <div class="col-lg-5">
+                      <div class="user-block">
+                        <span class="username">
+                          {{ tripdetails['t_trip_fromlocation'] }}
+                        </span>
+                        <span class="description">{{ tripdetails['t_start_date'] }}</span>
+                      </div>
+                    </div> to
+                    <div class="col-lg-5">
+                      <div class="user-block">
+                        <span class="username">
+                          {{ tripdetails['t_trip_tolocation'] }}
+                        </span>
+                        <span class="description">{{ tripdetails['t_end_date'] }}</span>
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+  <div class="user-block">
+    <span class="description">Duration: {{ tripdetails['t_trip_duration'] }}</span>
+  </div>
+</div>
+<div class="col-lg-12">
+  <div class="post-content mt-4">
+    <h4>Payment Details:</h4>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if paymentdetails|length >= 1 %}
+            {% for payment in paymentdetails %}
+              <tr>
+                <td>{{ payment['tp_date'] }}</td>
+                <td>{{ payment['tp_amount'] }}</td>
+                <td>{{ payment['tp_status'] }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="3">No payment details found.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+  <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Trip Details</h3>
+  <p class="text-muted">{{ tripdetails['t_trip_description'] }}</p>
+  <br>
+  <div class="text-muted">
+    <p class="text-sm">Trip ID: {{ tripdetails['t_trip_id'] }}</p>
+    <p class="text-sm">Created By: {{ tripdetails['t_created_by'] }}</p>
+    <p class="text-sm">Created At: {{ tripdetails['t_created_at'] }}</p>
+  </div>
+</div>
+</div>
+</div>
+</section>
+

@@ -1,0 +1,142 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{{ 'Edit Vehicle' if vehicledetails is defined else 'Add Vehicle' }}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ base_url() }}/dashboard">Vehicle</a></li>
+          <li class="breadcrumb-item active">{{ 'Edit vehicle' if vehicledetails is defined else 'Add Vehicle' }}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
+  <div class="container-fluid">
+    <form method="post" id="vehicle_add" class="card" action="{{ base_url() }}/vehicle/{{ 'updatevehicle' if vehicledetails is defined else 'insertvehicle' }}">
+      <div class="card-body">
+        <div class="row">
+          <input type="hidden" name="v_id" id="v_id" value="{{ vehicledetails[0]['v_id'] if vehicledetails is defined else '' }}">
+          <div class="col-sm-6 col-md-4">
+            <label class="form-label">Registration Number</label>
+            <div class="form-group">
+              <input type="text" name="v_registration_no" id="v_registration_no" class="form-control" placeholder="Registration Number" value="{{ vehicledetails[0]['v_registration_no'] if vehicledetails is defined else '' }}">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <label class="form-label">Vehicle Name</label>
+            <div class="form-group">
+              <input type="text" name="v_name" id="v_name" class="form-control" placeholder="Vehicle Name" value="{{ vehicledetails[0]['v_name'] if vehicledetails is defined else '' }}">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label class="form-label">Model</label>
+              <input type="text" name="v_model" value="{{ vehicledetails[0]['v_model'] if vehicledetails is defined else '' }}" class="form-control" placeholder="Model">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label class="form-label">Chassis No</label>
+              <input type="text" name="v_chassis_no" value="{{ vehicledetails[0]['v_chassis_no'] if vehicledetails is defined else '' }}" class="form-control" placeholder="Chassis No">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label class="form-label">Engine No</label>
+              <input type="text" name="v_engine_no" value="{{ vehicledetails[0]['v_engine_no'] if vehicledetails is defined else '' }}" class="form-control" placeholder="Engine No">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label class="form-label">Manufactured By</label>
+              <input type="text" name="v_manufactured_by" value="{{ vehicledetails[0]['v_manufactured_by'] if vehicledetails is defined else '' }}" class="form-control" placeholder="Manufactured By">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label class="form-label">Vehicle Type</label>
+              <select id="v_type" name="v_type" class="form-control" required>
+                <option value="">Select Vehicle Type</option>
+                <option {{ 'selected' if vehicledetails is defined and vehicledetails[0]['v_type'] == 'CAR' else '' }} value="CAR">CAR</option>
+                <option {{ 'selected' if vehicledetails is defined and vehicledetails[0]['v_type'] == 'MOTORCYCLE' else '' }} value="MOTORCYCLE">MOTORCYCLE</option>
+                <option {{ 'selected' if vehicledetails is defined and vehicledetails[0]['v_type'] == 'TRUCK' else '' }} value="TRUCK">TRUCK</option>
+                <option {{ 'selected' if vehicledetails is defined and vehicledetails[0]['v_type'] == 'BUS' else '' }} value="BUS">BUS</option>
+                <option {{ 'selected' if vehicledetails is defined and vehicledetails[0]['v_type'] == 'TAXI' else '' }} value="TAXI">TAXI</option>
+                <option {{ 'selected' if vehicledetails is defined and vehicledetails[0]['v_type'] == 'BICYCLE' else '' }} value="BICYCLE">BICYCLE</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label for="v_color" class="form-label">Vehicle Color<small> (To show in Map)</small></label>
+              <input id="add-device-color" name="v_color" class="jscolor {valueElement:'add-device-color', styleElement:'add-device-color', hash:true, mode:'HSV'} form-control" value="{{ vehicledetails[0]['v_color'] if vehicledetails is defined else '#F399EB' }}" required>
+            </div>
+          </div>
+          {% if vehicledetails[0]['v_is_active'] is defined %}
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label for="v_is_active" class="form-label">Vehicle Status</label>
+              <select id="v_is_active" name="v_is_active" class="form-control" required>
+                <option value="">Select Vehicle Status</option>
+                <option {{ 'selected' if vehicledetails is defined and vehicledetails[0]['v_is_active'] == 1 else '' }} value="1">Active</option>
+                <option {{ 'selected' if vehicledetails is defined and vehicledetails[0]['v_is_active'] == 0 else '' }} value="0">Inactive</option>
+              </select>
+            </div>
+          </div>
+          {% endif %}
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label class="form-label">Registration Expiry Date</label>
+              <input type="text" required name="v_reg_exp_date" value="{{ vehicledetails[0]['v_reg_exp_date'] if vehicledetails is defined else '' }}" class="form-control datepicker" placeholder="Registration Expiry Date">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label for="v_group" class="form-label">Vehicle Group</label>
+              <select id="v_group" name="v_group" class="form-control" required>
+                <option value="">Select Vehicle Group</option>
+                {% for v_groupdata in v_group %}
+                <option {{ 'selected' if vehicledetails[0]['v_group'] is defined and vehicledetails[0]['v_group'] == v_groupdata['gr_id'] else '' }} value="{{ v_groupdata['gr_id'] }}">{{ v_groupdata['gr_name'] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="form-label"><b>GPS API Details(Feed GPS Data)</b></div>
+        <div class="row">
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label class="form-label">API URL</label>
+              <input type="text" name="v_api_url" class="form-control" placeholder="API URL" value="{{ base_url() }}/api" readonly>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label class="form-label">API Username</label>
+              <input type="text" id="v_api_username" value="{{ vehicledetails[0]['v_api_username'] if vehicledetails is defined else '' }}" name="v_api_username" class="form-control" placeholder="API Username" readonly>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+              <label class="form-label">API Password</label>
+              <input type="text" name="v_api_password" class="form-control" placeholder="API Password" value="{{ vehicledetails[0]['v_api_password'] if vehicledetails is defined else random_string('nozero', 6) }}" readonly>
+            </div>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" id="v_created_by" name="v_created_by" value="{{ output(session['session_data']['u_id']) }}">
+      <input type="hidden" id="v_created_date" name="v_created_date" value="{{ datetime.now().strftime('%Y-%m-%d %H:%M:%S') }}">
+      <div class="card-footer text-right">
+        <button type="submit" class="btn btn-primary">{{ 'Update Vehicle' if vehicledetails is defined else 'Add Vehicle' }}</button>
+      </div>
+    </form>
+  </div>
+</section>
+<!-- /.content -->

@@ -1,0 +1,27 @@
+
+"""
+@app.route('/api/data')
+def get_data():
+    response = requests.get('http://api.example.com/data')
+    return response.json()
+
+@app.route('/api/data', methods=['POST'])
+def create_data():
+    data = {'name': 'John', 'age': 30}
+    response = requests.post('http://api.example.com/data', json=data)
+    json_data = response.json()
+    results = json_data['results']
+    new_results = []
+    for result in results:
+        new_result = {}
+        new_result['title'] = result['title']
+        new_result['overview'] = result['overview']
+        new_results.append(new_result)
+    return {"results": new_results}
+ 
+Convert the response to a Python dictionary.
+Extract the results property from the dictionary.
+Iterate over the results property and create a new 
+Return the JSON data 
+
+"""

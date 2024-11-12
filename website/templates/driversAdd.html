@@ -1,0 +1,97 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{{ 'Edit driver' if driverdetails is defined else 'Add driver' }}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Vehicle</a></li>
+          <li class="breadcrumb-item active">{{ 'Edit driver' if driverdetails is defined else 'Add driver' }}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <form method="post" id="add_driver" class="card" action="{{ url_for('updatedriver') if driverdetails is defined else url_for('insertdriver') }}">
+      <div class="card-body">
+        <div class="row">
+          <input type="hidden" name="d_id" id="d_id" value="{{ driverdetails[0]['d_id'] if driverdetails is defined else '' }}">
+          <div class="col-sm-6 col-md-3">
+            <label class="form-label">Driver Name<span class="form-required">*</span></label>
+            <div class="form-group">
+              <input type="text" name="d_name" id="d_name" class="form-control" placeholder="Driver Name" value="{{ driverdetails[0]['d_name'] if driverdetails is defined else '' }}">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Mobile<span class="form-required">*</span></label>
+              <input type="text" name="d_mobile" value="{{ driverdetails[0]['d_mobile'] if driverdetails is defined else '' }}" class="form-control" placeholder="Mobile">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Age<span class="form-required">*</span></label>
+              <input type="text" name="d_age" value="{{ driverdetails[0]['d_age'] if driverdetails is defined else '' }}" class="form-control" placeholder="Age">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">License No<span class="form-required">*</span></label>
+              <input type="text" name="d_licenseno" value="{{ driverdetails[0]['d_licenseno'] if driverdetails is defined else '' }}" class="form-control" placeholder="License No">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">License Expiry Date<span class="form-required">*</span></label>
+              <input type="text" name="d_license_expdate" value="{{ driverdetails[0]['d_license_expdate'] if driverdetails is defined else '' }}" class="form-control datepickerpastdisable" placeholder="License Expiry Date">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Total Experience<span class="form-required">*</span></label>
+              <input type="text" name="d_total_exp" value="{{ driverdetails[0]['d_total_exp'] if driverdetails is defined else '' }}" class="form-control" placeholder="Total Experience">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Date of Joining<span class="form-required">*</span></label>
+              <input type="text" name="d_doj" value="{{ driverdetails[0]['d_doj'] if driverdetails is defined else '' }}" class="form-control datepicker" placeholder="Date of Joining">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Reference/Notes</label>
+              <input type="text" name="d_ref" value="{{ driverdetails[0]['d_ref'] if driverdetails is defined else '' }}" class="form-control" placeholder="Reference or Notes">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6">
+            <div class="form-group">
+              <label class="form-label">Address<span class="form-required">*</span></label>
+              <textarea class="form-control" autocomplete="off" placeholder="Address" name="d_address">{{ driverdetails[0]['d_address'] if driverdetails is defined else '' }}</textarea>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label for="d_is_active" class="form-label">Driver Status</label>
+              <select id="d_is_active" name="d_is_active" class="form-control" required="">
+                <option value="">Select Driver Status</option>
+                <option {{ 'selected' if driverdetails[0]['d_is_active'] == 1 else '' }} value="1">Active</option>
+                <option {{ 'selected' if driverdetails[0]['d_is_active'] == 0 else '' }} value="0">Inactive</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" id="d_created_by" name="d_created_by" value="{{ session['session_data']['u_id'] | output }}">
+      <input type="hidden" id="d_created_date" name="d_created_date" value="{{ date('Y-m-d h:i:s') }}">
+      <div class="card-footer text-right">
+        <button type="submit" class="btn btn-primary">{{ 'Update Driver' if driverdetails is defined else 'Add Driver' }}</button>
+      </div>
+    </form>
+  </div>
+</section>
+<!-- /.content -->

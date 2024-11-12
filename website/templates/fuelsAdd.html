@@ -1,0 +1,126 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{{ 'Edit Fuel' if fueldetails is defined else 'Add Fuel' }}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ base_url() }}/dashboard">Fuel</a></li>
+          <li class="breadcrumb-item active">{{ 'Edit Fuel' if fueldetails is defined else 'Add Fuel' }}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <form method="post" id="fuel" class="card" action="{{ base_url() }}fuel/{{ 'updatefuel' if fueldetails is defined else 'insertfuel' }}">
+      <div class="card-body">
+        <div class="row">
+          <input type="hidden" name="v_fuel_id" id="v_fuel_id" value="{{ fueldetails[0]['v_fuel_id'] if fueldetails is defined else '' }}">
+          <div class="col-sm-6 col-md-3">
+            <label class="form-label">Vechicle<span class="form-required">*</span></label>
+            <div class="form-group">
+              <select id="v_id" class="form-control selectized" name="v_id" required="true">
+                <option value="">Select Vechicle</option>
+                {% for vechiclelists in vechiclelist %}
+                  <option {% if fueldetails is defined and fueldetails[0]['v_id'] == vechiclelists['v_id'] %}selected{% endif %} value="{{ output(vechiclelists['v_id']) }}">{{ output(vechiclelists['v_name']) }} - {{ output(vechiclelists['v_registration_no']) }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Added Driver<span class="form-required">*</span></label>
+              <select id="v_fueladdedby" required="true" class="form-control selectized" name="v_fueladdedby">
+                <option value="">Select Driver</option>
+                {% for driverlists in driverlist %}
+                  <option {% if fueldetails is defined and fueldetails[0]['v_fueladdedby'] == driverlists['d_id'] %}selected{% endif %} value="{{ output(driverlists['d_id']) }}">{{ output(driverlists['d_name']) }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Fill Date<span class="form-required">*</span></label>
+              <input type="text" required="true" class="form-control datepicker" id="v_fuelfilldate" name="v_fuelfilldate" value="{{ fueldetails[0]['v_fuelfilldate'] if fueldetails is defined else '' }}" placeholder="Fuel Fill Date">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Quantity<span class="form-required">*</span></label>
+              <input type="text" class="form-control" id="v_fuel_quantity" name="v_fuel_quantity" value="{{ fueldetails[0]['v_fuel_quantity'] if fueldetails is defined else '' }}" placeholder="Quantity">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Odometer Reading<span class="form-required">*</span></label>
+              <input type="text" class="form-control" id="v_odometerreading" name="v_odometerreading" value="{{ fueldetails[0]['v_odometerreading'] if fueldetails is defined else '' }}" placeholder="Odometer Reading">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Amount<span class="form-required">*</span></label>
+              <input type="text" class="form-control" id="v_fuelprice" value="{{ fueldetails[0]['v_fuelprice'] if fueldetails is defined else '' }}" name="v_fuelprice" placeholder="Amount">
+            </div>
+          </div>
+	<div class="col-sm-6 col-md-3">
+	  <div class="form-group">
+	    <label class="form-label">Live Location<span class="form-required">*</span></label>
+	    <input type="hidden" class="form-control" id="live-location" name="live_location">
+	    <p id="live-location-display"></p>
+	  </div>
+	</div>
+          <div class="col-sm-6 col-md-6">
+            <div class="form-group">
+              <label class="form-label">Comment</label>
+              <input type="text" class="form-control" id="v_fuelcomments" value="{{ fueldetails[0]['v_fuelcomments'] if fueldetails is defined else '' }}" name="v_fuelcomments" placeholder="Fuel Comments">
+            </div>
+          </div>
+          {% if fueldetails is not defined %}
+            <br>
+            <div class="col-sm-6 col-md-3">
+              <div class="form-group">
+                <label class="form-label">Need to add in expense?</label>
+                <input class="form-control form-check-input" id="exp" name="exp" type="checkbox">
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        <input type="hidden" id="v_created_date" name="v_created_date" value="{{ date('Y-m-d h:i:s') }}">
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">{{ 'Update Fuel' if fueldetails is defined else 'Add Fuel' }}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+<!-- /.content -->
+<script>
+  // Function to retrieve the live location
+  function getLiveLocation() {
+    // Code to retrieve the live location using your preferred method
+    // For example, using the Geolocation API:
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    }
+  }
+
+  // Callback function to handle the retrieved position
+  function showPosition(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+    // Update the hidden input field with the live location coordinates
+    document.getElementById("live-location").value = latitude + "," + longitude;
+
+    // Display the live location for reference
+    var liveLocationDisplay = "Latitude: " + latitude + ", Longitude: " + longitude;
+    document.getElementById("live-location-display").innerText = liveLocationDisplay;
+  }
+
+  // Call the getLiveLocation function to initiate retrieving the live location
+  getLiveLocation();
+</script>

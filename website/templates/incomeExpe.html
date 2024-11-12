@@ -1,0 +1,72 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Income Expense Info</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ base_url() }}/dashboard">Dashboard</a></li>
+          <li class="breadcrumb-item active">Income Expense Info</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          {% if incomexpense %}
+            <table id="incomexpensetbl" class="table card-table">
+              <thead>
+                <tr>
+                  <th class="w-1">S.No</th>
+                  <th>Vehicle</th>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  {% if userpermission('lr_ie_edit') %}
+                    <th>Action</th>
+                  {% endif %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for incomexpenses in incomexpense %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ incomexpenses['vech_name'].v_name ~ '_' ~ incomexpenses['vech_name'].v_registration_no }}</td>
+                    <td>{{ incomexpenses['ie_date'] }}</td>
+                    <td>{{ incomexpenses['ie_description'] }}</td>
+                    <td>{{ incomexpenses['ie_amount'] }}</td>
+                    <td>
+                      <span class="badge {% if incomexpenses['ie_type'] == 'income' %}badge-success{% else %}badge-danger{% endif %}">
+                        {% if incomexpenses['ie_type'] == 'income' %}Income{% else %}Expense{% endif %}
+                      </span>
+                    </td>
+                    {% if userpermission('lr_ie_edit') %}
+                      <td>
+                        <a class="icon" href="{{ base_url() }}incomexpense/editincomexpense/{{ incomexpenses['ie_id'] }}">
+                          <i class="fa fa-edit"></i>
+                        </a>
+                      </td>
+                    {% endif %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <div class="alert alert-warning">No income or expense found!.</div>
+            <div style="padding-bottom:240px"></div>
+          {% endif %}
+        </div>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+</section>
+<!-- /.content -->

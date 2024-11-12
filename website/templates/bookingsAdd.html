@@ -1,0 +1,145 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{{ 'Edit Booking' if tripdetails is defined else 'Add Booking' }}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ base_url() }}/dashboard">Vehicle</a></li>
+          <li class="breadcrumb-item active">{{ 'Edit Booking' if tripdetails is defined else 'Add Booking' }}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <form method="post" id="trip_add" class="card" action="{{ base_url() }}/Trips/{{ 'updatetrips' if tripdetails is defined else 'inserttrips' }}">
+      <div class="card-body">
+        <div class="row">
+          <input type="hidden" name="t_id" id="t_id" value="{{ tripdetails[0]['t_id'] if tripdetails is defined else '' }}" >
+
+          <div class="col-sm-6 col-md-3">
+            <label class="form-label">Customer Name<span class="form-required">*</span></label>
+            <div class="form-group">
+              <select id="t_customer_id" class="form-control selectized" required="true" name="t_customer_id">
+                <option value="">Select Customer</option>
+                {% for customerlists in customerlist %}
+                <option {% if tripdetails is defined and tripdetails[0]['t_customer_id'] == customerlists['c_id'] %} selected {% endif %} value="{{ customerlists['c_id'] }}">{{ customerlists['c_name'] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Vehicle<span class="form-required">*</span></label>
+              <select id="t_vechicle" class="form-control" name="t_vechicle">
+                <option value="">Select Vehicle</option>
+                {% for vechiclelists in vechiclelist %}
+                <option {% if tripdetails is defined and tripdetails[0]['t_vechicle'] == vechiclelists['v_id'] %} selected {% endif %} value="{{ vechiclelists['v_id'] }}">{{ vechiclelists['v_name'] }} - {{ vechiclelists['v_registration_no'] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Driver<span class="form-required">*</span></label>
+              <select id="t_driver" class="form-control" name="t_driver">
+                <option value="">Select Driver</option>
+                {% for driverlists in driverlist %}
+                <option {% if tripdetails is defined and tripdetails[0]['t_driver'] == driverlists['d_id'] %} selected {% endif %} value="{{ driverlists['d_id'] }}">{{ driverlists['d_name'] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Trip Type<span class="form-required">*</span></label>
+              <select id="t_type" class="form-control" name="t_type">
+                <option value="">Select Trip Type</option>
+                <option {% if tripdetails is defined and tripdetails[0]['t_type'] == 'singletrip' %} selected {% endif %} value="singletrip">Single Trip</option>
+                <option {% if tripdetails is defined and tripdetails[0]['t_type'] == 'roundtrip' %} selected {% endif %} value="roundtrip">Round Trip</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Trip Start Location<span class="form-required">*</span></label>
+              <input type="text" value="{{ tripdetails[0]['t_trip_fromlocation'] if tripdetails is defined else '' }}" name="t_trip_fromlocation" id="t_trip_fromlocation" class="form-control" placeholder="Trip Start Location">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Trip End Location<span class="form-required">*</span></label>
+              <input type="text" value="{{ tripdetails[0]['t_trip_tolocation'] if tripdetails is defined else '' }}" name="t_trip_tolocation" id="t_trip_tolocation" class="form-control" placeholder="Trip End Location">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Approx Total KM<span class="form-required">*</span></label>
+              <input type="text" value="{{ tripdetails[0]['t_totaldistance'] if tripdetails is defined else '' }}" readonly="true" name="t_totaldistance" id="t_totaldistance" class="form-control" placeholder="Approx Total KM">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Trip Start Date<span class="form-required">*</span></label>
+              <input type="text" value="{{ tripdetails[0]['t_start_date'] if tripdetails is defined else '' }}" name="t_start_date" value="" class="form-control datepicker" placeholder="Trip Start Date">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Trip End Date<span class="form-required">*</span></label>
+              <input type="text" value="{{ tripdetails[0]['t_end_date'] if tripdetails is defined else '' }}" name="t_end_date" value="" class="form-control datepicker" placeholder="Trip End Date">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Total Amount<span class="form-required">*</span></label>
+              <input type="text" value="{{ tripdetails[0]['t_trip_amount'] if tripdetails is defined else '' }}" name="t_trip_amount" value="" class="form-control" placeholder="Total Amount">
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Trip Status</label>
+              <select name="t_trip_status" id="t_trip_status" required="true" class="form-control">
+                <option value="">Trip Status</option>
+                <option {% if tripdetails is defined and tripdetails[0]['t_trip_status'] == 'yettostart' %} selected {% endif %} value="yettostart">Yet to start</option>
+                <option {% if tripdetails is defined and tripdetails[0]['t_trip_status'] == 'completed' %} selected {% endif %} value="completed">Completed</option>
+                <option {% if tripdetails is defined and tripdetails[0]['t_trip_status'] == 'ongoing' %} selected {% endif %} value="ongoing">Ongoing</option>
+                <option {% if tripdetails is defined and tripdetails[0]['t_trip_status'] == 'cancelled' %} selected {% endif %} value="cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+          {% if tripdetails is not defined %}
+          <div class="col-sm-6 col-md-5">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <div class="form-group mb-0">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" value="1" name="bookingemail" id="bookingemail" class="custom-control-input" id="bookingemail">
+                  <label class="custom-control-label" for="bookingemail">Is need to sent Booking confirmation email to customer?</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+
+        <input type="hidden" id="t_trip_fromlat" name="t_trip_fromlat" value="1">
+        <input type="hidden" id="t_trip_fromlog" name="t_trip_fromlog" value="1">
+        <input type="hidden" id="t_trip_tolat" name="t_trip_tolat" value="1">
+        <input type="hidden" id="t_trip_tolog" name="t_trip_tolog" value="1">
+        <input type="hidden" id="t_created_by" name="t_created_by" value="{{ session['session_data']['u_id'] | output }}">
+        <input type="hidden" id="t_created_date" name="t_created_date" value="{{ 'now' | date('Y-m-d H:i:s') }}">
+        <div class="card-footer text-right">
+          <button type="submit" class="btn btn-primary"> {{ 'Update Trip' if tripdetails is defined else 'Add Trip' }}</button>
+        </div>
+      </form>
+    </div>
+  </section>
+  <!-- /.content -->
+</div>

@@ -1,0 +1,79 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{{ 'Edit Income/Expense' if incomexpensedetails is defined else 'Add Income/Expense' }}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ base_url() }}/dashboard">Customer</a></li>
+          <li class="breadcrumb-item active">{{ 'Edit Income/Expense' if incomexpensedetails is defined else 'Add Income/Expense' }}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <form method="post" id="Income_Expense" class="card" action="{{ base_url() }}/Incomexpense/{{ 'updateincomexpense' if incomexpensedetails is defined else 'insertincomexpense' }}">
+      <div class="card-body">
+        <div class="row">
+          <input type="hidden" name="ie_id" id="ie_id" value="{{ incomexpensedetails[0]['ie_id'] if incomexpensedetails is defined else '' }}" >
+
+          <div class="col-sm-6 col-md-3">
+            <label class="form-label">Vehicle<span class="form-required">*</span></label>
+            <div class="form-group">
+              <select id="ie_v_id" class="form-control" name="ie_v_id">
+                <option value="">Select Vehicle</option>
+                {% for vechiclelists in vechiclelist %}
+                  <option {% if incomexpensedetails[0]['ie_v_id'] == vechiclelists['v_id'] %}selected{% endif %} value="{{ output(vechiclelists['v_id']) }}">{{ output(vechiclelists['v_name']) }} - {{ output(vechiclelists['v_registration_no']) }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Type<span class="form-required">*</span></label>
+              <select name="ie_type" id="ie_type" class="form-control">
+                <option value="">Select type</option>
+                <option {% if incomexpensedetails[0]['ie_type'] == 'income' %}selected{% endif %} value="income">Income</option>
+                <option {% if incomexpensedetails[0]['ie_type'] == 'expense' %}selected{% endif %} value="expense">Expense</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Date<span class="form-required">*</span></label>
+              <input type="text" class="form-control datepicker" id="ie_date" name="ie_date" value="{{ incomexpensedetails[0]['ie_date'] if incomexpensedetails is defined else '' }}" placeholder="Income/Expense">
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <input type="text" class="form-control" id="ie_description" value="{{ incomexpensedetails[0]['ie_description'] if incomexpensedetails is defined else '' }}" name="ie_description" placeholder="Description">
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="form-group">
+              <label class="form-label">Amount<span class="form-required">*</span></label>
+              <input type="text" class="form-control" id="ie_amount" value="{{ incomexpensedetails[0]['ie_amount'] if incomexpensedetails is defined else '' }}" name="ie_amount" placeholder="Amount">
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" id="ie_created_date" name="ie_created_date" value="{{ date('Y-m-d h:i:s') }}">
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">{{ 'Update Income/Expense' if incomexpensedetails is defined else 'Add Income/Expense' }}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+<!-- /.content -->
