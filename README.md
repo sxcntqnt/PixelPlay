@@ -32,8 +32,8 @@ This project is a **fleet management system** with a **Flask-based front-end** t
 ### Clone the repository
 
 ```bash
-git clone https://github.com/sxcntqnt/dayuno
-cd dayuno
+git clone https://github.com/sxcntqnt/PixelPlay
+cd PixelPlay
 
 
 python3 -m venv venv
@@ -42,7 +42,7 @@ source venv/bin/activate  # On Windows use: venv\Scripts\activate
 pip install -r requirements.txt
 
 export FLASK_APP=main.py
-export FLASK_ENV=development
+export FLASK_ENV=production
 
 flask run
 
